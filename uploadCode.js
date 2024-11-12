@@ -1,110 +1,98 @@
-import { Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, ImageBackground, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
+import logo from '../../../../assets/pp_logo.png'
+import greenBg from '../../../../assets/nft04.jpeg'
+import {
+ containerFull, logo1, greenBackground,
+ brandView, brandViewText, bottomView, goback
+} from '../../../CommonCss/pagecss'
+import { formTop, formInput, formbtn, formHead3, formHead4 } from '../../../CommonCss/formcss'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+const Signup_ChoosePassword = ({ navigation, route }) => {
+ const { email, username } = route.params
+ const [password, setPassword] = useState('')
+ const [confirmPassword, setConfirmPassword] = useState('')
+ const [loading, setLoading] = useState(false)
 
 
+ const handlePassword = () => {
+   //navigation.navigate('Signup_AccountCreated')
+   if (password == '' || confirmPassword == '') {
+     Alert.alert('Please Enter A Password')
+   } else if (password != confirmPassword) {
+     Alert.alert('Passwords do not match!')
+   } else {
+     setLoading(true)
+     fetch('http://10.0.2.2:3000/signup', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({ email: email, username: username, password: password })
+     })
+       .then(res => res.json()).then(
+         data => {
+           if (data.message === "You Have Been Registered Successfully!") {
+             setLoading(false)
+             Alert.alert(data.message)
+             navigation.navigate('Login')
+           } else {
+             setLoading(false)
+             Alert.alert("Please try again")
+           }
+         }
+       )
+   }
+ }
 
 
-module.exports = {
-formTop: {
-  padding: 40
-},
-formTextLinkCenter: {
-  color: 'gray',
-  fontSize: 16
-},
-searchFormHead: {
-  color: '#4632A1',
-  fontSize: 30,
-  textAlign: 'center'
-},
-signUp: {
-  color: 'red',
-  fontStyle: 'italic'
-},
-formInput: {
-  borderColor: '#4632A1',
-  backgroundColor: 'white',
-  borderRadius: 10,
-  fontSize: 18,
-  borderBottomColor: '#000',
-  borderBottomWidth: .5,
-  marginVertical: -20,
-  paddingHorizontal: 15,
-  paddingVertical: 10,
-  marginTop: 5
-},
-formInputOld: {
-  borderColor: '#4632A1',
-  backgroundColor: 'white',
-  borderRadius: 10,
-  fontSize: 18,
-  borderBottomColor: '#000',
-  borderBottomWidth: .5,
-  marginVertical: 20,
-  paddingHorizontal: 15,
-  paddingVertical: 10,
-  marginTop: 5
-},
-changePasswordLink: {
-  height: 50,
-  marginBottom: -60,
-  marginTop: 40,
-  flexDirection: 'row',
-  marginLeft: 195,
-  color: 'red'
-},
-formTextLinkRight: {
-  height: 50,
-  marginTop: 10,
-  flexDirection: 'row',
-  marginLeft: 195,
-  color: '#8f9195'
-},
-formbtn: {
-  width: Dimensions.get('window').width / 2.5,
-  alignSelf: 'center',
-  justifyContent: 'center',
-  backgroundColor: '#de813e',
-  borderRadius: 25,
-  borderColor: 'white',
-  borderWidth: 1,
-  fontSize: 20,
-  color: 'white',
-  textAlign: 'center',
-  paddingVertical: 10,
-  marginTop: 50
-},
-formHead2: {
-  fontSize: 20,
-  color: 'green',
-  textAlign: 'center',
-},
-formHead3: {
-  color: '#4632A1',
-  textAlign: 'center',
-  fontSize: 16
-},
-formHead4: {
-  color: '#4632A1',
-  fontSize: 20,
-  textAlign: 'center'
-},
-formHead5: {
-  color: 'green',
-  textAlign: 'center',
-  fontSize: 16
-},
-formbtn2: {
-  width: Dimensions.get('window').width / 2.5,
-  alignSelf: 'center',
-  justifyContent: 'center',
-  backgroundColor: '#4632A1',
-  borderRadius: 25,
-  borderColor: 'white',
-  borderWidth: 1,
-  fontSize: 20,
-  color: 'white',
-  textAlign: 'center',
-  paddingVertical: 10,
-  marginTop: 50
+ return (
+
+   <ScrollView style={containerFull}>
+     <ImageBackground source={greenBg} style={greenBackground}>
+       <View>
+         <TouchableOpacity style={goback} onPress={() => navigation.navigate('Login')}>
+           <Ionicons name="arrow-undo-circle" size={40} color="white" />
+         </TouchableOpacity>
+         <Text style={{
+           fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 40, marginLeft: 65,
+           position: 'absolute'
+         }}>Go back</Text>
+       </View>
+       <View style={brandView}>
+         <Image style={logo1} source={logo} />
+         <Text style={brandViewText}>Poetionpics</Text>
+       </View>
+     </ImageBackground>
+
+     <View style={bottomView}>
+       <View style={formTop}>
+
+         <Text style={formHead4}>Choose a strong password</Text>
+         <View style={{ marginTop: 50 }}>
+           <TextInput placeholder='Enter Password' style={formInput} secureTextEntry
+             onChangeText={(text) => setPassword(text)}
+           />
+         </View>
+         <View style={{ marginTop: 50 }}>
+           <TextInput placeholder='Confirm Password' style={formInput} secureTextEntry
+             onChangeText={(text) => setConfirmPassword(text)}
+           />
+         </View>
+         <Text style={formbtn}
+           onPress={() => handlePassword()}>
+           Next
+         </Text>
+       </View>
+     </View>
+   </ScrollView>
+ )
 }
-}
+
+
+export default Signup_ChoosePassword
+
+const styles = StyleSheet.create({
+
+})
