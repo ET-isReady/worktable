@@ -1,64 +1,66 @@
 import {
-    StyleSheet, Text, View, Image, TextInput, ImageBackground, ScrollView, TouchableOpacity,
-    ActivityIndicator, Alert
+    StyleSheet, Text, View, Image, TextInput, ImageBackground, ScrollView, TouchableOpacity, Alert,
+    ActivityIndicator
    } from 'react-native'
    import React, { useState } from 'react'
    import logo from '../../../../assets/pp_logo.png'
-   import greenBg from '../../../../assets/nft03.jpeg'
+   import purpleBg from '../../../../assets/purple_tech.jpeg'
    import {
     containerFull, logo1, greenBackground,
     brandView, brandViewText, bottomView, goback
    } from '../../../CommonCss/pagecss'
-   import { formTop, formHead2, formInput, formbtn, formHead5 } from '../../../CommonCss/formcss'
+   import { formTop, formInput, formbtn, formHead5 } from '../../../CommonCss/formcss'
    import Ionicons from 'react-native-vector-icons/Ionicons'
  
-
-   const Signup_ChooseUsername = ({ navigation, route }) => {
+   
+   const Signup_EnterEmail = ({ navigation }) => {
    
    
-    const { email } = route.params
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
    
    
-    const handleUsername = () => {
-      if (username == '') {
-        Alert.alert('Please enter username')
-      }
-      else {
+    const handleEmail = () => {
+      setLoading(true)
+      if (email == '') {
+        Alert.alert('Please Enter Email')
+      } else {
         setLoading(true)
-        fetch('http://10.0.2.2:3000/changeusername', {
+        fetch('http://10.0.2.2:3000/verify', {
           method: 'post',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            email: email,
-            username: username
+            email: email
           })
         })
           .then(res => res.json()).then(
             data => {
-              if (data.message === "Username Available!") {
+              if (data.error === "Invalid Credentials") {
+                //alert('Invalid Credentials')
+                Alert.alert('Invalid Credentials')
                 setLoading(false)
-                Alert.alert('Username has been set!')
-                navigation.navigate('Signup_ChoosePassword', { email: email, username: username })
               }
-              else {
+              else if (data.message === "Verification Code Sent to your Email") {
                 setLoading(false)
-                Alert.alert("Username not available");
+                Alert.alert(data.message);
+                navigation.navigate('Signup_EnterVerificationCode', {
+                  useremail: data.email,
+                  userVerificationCode: data.VerificationCode
+                })
               }
             }
-          ).catch(err => {
-            console.log(err)
-          })
+          )
       }
     }
+   
+   
     return (
    
    
-      <ScrollView style={containerFull}>
-        <ImageBackground source={greenBg} style={greenBackground}>
+      <View style={containerFull}>
+        <ImageBackground source={purpleBg} style={greenBackground}>
           <View>
             <TouchableOpacity style={goback} onPress={() => navigation.navigate('Login')}>
               <Ionicons name="arrow-undo-circle" size={40} color="white" />
@@ -79,33 +81,32 @@ import {
           <View style={formTop}>
    
    
-            <Text style={formHead2}>Great!</Text>
-            <Text style={formHead5}>Now Choose a Username</Text>
+            <Text style={formHead5}>Create a new account!</Text>
             <View style={{ marginTop: 50 }}>
-              <TextInput placeholder='Enter Username' style={formInput}
-                onChangeText={(text) => setUsername(text)}
+              <TextInput keyboardType='email-address' placeholder='Enter Your Email' style={formInput}
+                onChangeText={(text) => {
+                  setEmail(text)
+                }}
               />
             </View>
             {
-              loading ? <ActivityIndicator />
+              loading ?
+                <ActivityIndicator size="large" color='#00FF7F' />
                 :
                 <Text style={formbtn}
-                  onPress={() => handleUsername()}>
+                  onPress={() => handleEmail()}
+                >
                   Next
                 </Text>
             }
           </View>
         </View>
-      </ScrollView>
+      </View>
     )
    }
    
-   
-   export default Signup_ChooseUsername
-   
+   export default Signup_EnterEmail
    
    const styles = StyleSheet.create({
    
-   
    })
-   
