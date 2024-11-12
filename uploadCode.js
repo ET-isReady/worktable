@@ -1,77 +1,131 @@
-import { StyleSheet, Text, View, Image, TextInput, ImageBackground, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
-import logo from '../../../../assets/pp_logo.png'
-import greenBg from '../../../../assets/nft02.jpeg'
-import {
- containerFull, logo1, greenBackground,
- brandView, brandViewText, bottomView, goback
-} from '../../../CommonCss/pagecss'
-import {
- formTop, formInput, formbtn,
- formHead3
-} from '../../../CommonCss/formcss'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import { StyleSheet, Text, View, Image, TextInput, ImageBackground, ScrollView,
+    ActivityIndicator, Alert} from 'react-native'
+    import AsyncStorage from '@react-native-async-storage/async-storage'
+    import React, { useState, useEffect } from 'react'
+ 
+ 
+    import { loadUser, loginUser } from '../../../../redux/actions/userAction'
+    import { useDispatch, useSelector } from 'react-redux'
+ 
+ 
+    import logo from '../../../../assets/pp_logo.png'
+    import greenBg from '../../../../assets/green_tech.jpeg'
+    import { containerFull, logo1, greenBackground,
+      brandView, brandViewText, bottomView } from '../../../CommonCss/pagecss'
+    import { formTop, formTextLinkCenter, formHead, signUp, formInput, formTextLinkRight, formbtn } from '../../../CommonCss/formcss'
+    import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+    import Ionicons from 'react-native-vector-icons/Ionicons'
 
-
-const Signup_EnterVerificationCode = ({ navigation, route }) => {
-
- const { useremail, userVerificationCode } = route.params
- const [verificationCode, setVerificationCode] = useState('')
- console.log(useremail, userVerificationCode)
-
-
- const handleVerificationCode = () => {
-   if (verificationCode != userVerificationCode) {
-     Alert.alert('Invalid Verification Code!')
-   } else {
-     Alert.alert('Verification Code Matched!')
-     navigation.navigate('Signup_ChooseUsername', { email: useremail })
-   }
-
- }
-
-
- return (
-
-   <ScrollView style={containerFull}>
-     <ImageBackground source={greenBg} style={greenBackground}>
-       <View>
-         <TouchableOpacity style={goback} onPress={() => navigation.navigate('Login')}>
-           <Ionicons name="arrow-undo-circle" size={40} color="white" />
-         </TouchableOpacity>
-         <Text style={{
-           fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 40, marginLeft: 65,
-           position: 'absolute'
-         }}>Go back</Text>
-       </View>
-       <View style={brandView}>
-         <Image style={logo1} source={logo} />
-         <Text style={brandViewText}>Poetionpics</Text>
-       </View>
-     </ImageBackground>
-
-     <View style={bottomView}>
-       <View style={formTop}>
-
-         <Text style={formHead3}>A verification code has been sent to your email.</Text>
-
-         <View style={{ marginTop: 50 }}>
-           <TextInput placeholder='Enter 6-Digit Code Here' style={formInput}
-             onChangeText={(text) => setVerificationCode(text)}
-           />
-         </View>
-         <Text style={formbtn}
-           onPress={() => handleVerificationCode()}>
-           Next
-         </Text>
-       </View>
-     </View>
-   </ScrollView>
- )
-}
-
-export default Signup_EnterVerificationCode
-
-const styles = StyleSheet.create({
-
-})
+     
+      const Login = ({navigation}) => {
+       
+          const { error, isAuthenticated } = useSelector(( state ) => state.user)
+          const [ email, setEmail ] = useState('')
+          const [ password, setPassword ] = useState('')
+          const [ loading, setLoading ] = useState('')
+          const dispatch = useDispatch()
+         
+         
+          const handleLogin = (e)=>{
+           
+          loginUser( email, password )(dispatch)
+ 
+ 
+          if( email == '' || password == ''){
+                    Alert.alert('Please Fill In Email & Password Fields!')
+                  } else{
+                    setLoading(true)
+                    fetch('http://10.0.2.2:3000/login', {
+                      method: 'post',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        email,
+                        password
+                      })
+                    })
+                    .then( res => res.json())
+                    .then( async data =>{
+                      if(data.error){
+                        setLoading(false)
+                        Alert.alert(data.error)
+                      } else if( data.message == 'Successfully Signed In!'){
+                        setLoading(false)
+                        await AsyncStorage.setItem('user', JSON.stringify(data))
+                        navigation.navigate('MainPage', { data })
+                      }
+                    })
+                    .catch( err => {
+                      setLoading(false)
+                      Alert.alert(err)
+                    })
+         
+          }
+        }
+       
+    
+          // useEffect(()=>{
+          //   if(error){
+          //   Alert.alert(error)
+          //   console.log(error)
+          //   }
+          //   if(isAuthenticated)
+          //   navigation.navigate('MainPage')
+          //   Alert.alert("Login Successful!")
+           
+          //   }, [])
+     
+  
+      return (
+        <ScrollView style={containerFull}>
+        <ImageBackground source={greenBg} style={greenBackground}>
+        <View style={brandView}>
+        <Image style={logo1} source={logo}/>
+        <Text style={brandViewText}>Poetionpics</Text>
+        </View>
+        </ImageBackground>
+  
+        <View style={bottomView}>
+        <View style={formTop}>
+          <Text style={formHead}>Welcome!</Text>
+          <Text style={formTextLinkCenter}>
+          Don't have an account?
+          <Text style={signUp}
+          onPress={()=> navigation.navigate('Signup_EnterEmail')}
+          > Register Now</Text>
+          </Text>
+          <View style={{ marginTop: 50 }}>
+            <TextInput keyboardType='email-address' placeholder='Enter Your Email' style={formInput}
+            onChangeText={(text)=>setEmail(text)}
+            />
+          </View>
+          <View style={{ marginTop: 50 }}>
+            <TextInput secureTextEntry={true} placeholder='Enter Your Password' style={formInput}
+            onChangeText={(text)=>setPassword(text)}
+            />
+          </View>
+  
+          {/* {
+            loading ?
+            <ActivityIndicator size="large" color='#00FF7F' /> : */}
+            <Text style={formbtn} onPress={handleLogin}>
+            Login
+            </Text>
+          {/* } */}
+  
+          <Text style={formTextLinkRight}
+          onPress={()=>navigation.navigate('ForgotPassword_EnterEmail')}>
+          Forgot Password?</Text>
+        </View>
+        </View>
+  
+        </ScrollView>
+      )
+    }
+  
+    export default Login
+  
+    const styles = StyleSheet.create({
+  
+    })
