@@ -1,68 +1,65 @@
-import { StyleSheet, Text, View, Image, TextInput, ImageBackground, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
-import logo from '../../../../assets/pp_logo.png'
-import greenBg from '../../../../assets/nft02.jpeg'
-import { containerFull, logo1, greenBackground,
-brandView, brandViewText, bottomView, goback, row } from '../../../CommonCss/pagecss'
-import { formTop, formInput, formbtn, formHead3 } from '../../../CommonCss/formcss'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import { StyleSheet, Text, View, StatusBar, Alert } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useState, useEffect } from 'react'
+
+import BottomNavbar from '../../components/BottomNavbar'
+import TopNavbar from '../../components/TopNavbar'
+import FollowersRandomPost from '../../components/FollowersRandomPost'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+
+const MainPage = ({ navigation })=>{
 
 
-const ForgotPassword_EnterVerificationCode = ({ navigation, route })=>{
-
-const { useremail, userVerificationCode } = route.params
-const [ verificationCode, setVerificationCode ] = useState('')
-console.log(useremail, userVerificationCode)
+const [ userdata, setUserdata ] = useState(null)
 
 
-const handleVerificationCode = ()=>{
-  if(verificationCode != userVerificationCode) {
-    Alert.alert('Invalid Verification Code!')
-  } else{
-    Alert.alert('Verification Code Matched!')
-    navigation.navigate('ForgotPassword_ChoosePassword', { email: useremail })
-  }
-}
+useEffect(()=>{
+  AsyncStorage.getItem('user')
+  .then(data => {
+    setUserdata(JSON.parse(data))
+  })
+  .catch(err => Alert.alert(err))
+
+
+}, [])
+console.log('userdata ', userdata)
 
 return (
-
-  <ScrollView style={containerFull}>
-  <ImageBackground source={greenBg} style={greenBackground}>
-  <View>
-  <TouchableOpacity style={goback} onPress={()=> navigation.navigate('Login')}>
-  <Ionicons name="arrow-undo-circle" size={40} color="white" />
-  </TouchableOpacity>
-  <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 40, marginLeft: 65,
-  position: 'absolute'}}>Go back</Text>
+  <View style={styles.container}>
+  <StatusBar />
+  <TopNavbar navigation = {navigation} page={"MainPage"} />
+  <AntDesign name="pluscircle" size={50} color="#FF80ED"
+  style={styles.pluscircle} onPress={()=>navigation.navigate('AddPost')} />
+  <BottomNavbar navigation = {navigation} page={'MainPage'} />
+  <FollowersRandomPost />
   </View>
-  <View style={brandView}>
-  <Image style={logo1} source={logo}/>
-  <Text style={brandViewText}>Poetionpics</Text>
-  </View>
-  </ImageBackground>
-
-  <View style={bottomView}>
-  <View style={formTop}>
-
-    <Text style={formHead3}>A verification code has been sent to your email.</Text>
-
-    <View style={{ marginTop: 50 }}>
-      <TextInput placeholder='Enter 6-Digit Code Here' style={formInput}
-        onChangeText={(text)=>setVerificationCode(text)}
-       />
-    </View>
-    <Text style={formbtn}
-      onPress={()=> handleVerificationCode()}>
-      Next
-    </Text>
-  </View>
-  </View>
-  </ScrollView>
 )
 }
 
-export default ForgotPassword_EnterVerificationCode
+export default MainPage
 
 const styles = StyleSheet.create({
-
+container: {
+  width: '100%',
+  height: '100%',
+  paddingVertical: 50
+},
+pluscircle: {
+  position: 'absolute',
+  zIndex: 100,
+  bottom: 50,
+  right: 10,
+  borderColor: '#00FF7F',
+  borderWidth: .5,
+  borderRadius: 25,
+  backgroundColor: '#fff',
+  shadowColor: 'green',
+  shadowOffset: {
+    width: 0,
+    height: 1
+  },
+  shadowOpacity: .2,
+  shadowRadius: 2,
+  elevation: 20
+}
 })
