@@ -1,13 +1,10 @@
-router.post('/update-pic', async (req, res)=>{
-    const { email, profilepic } = req.body
-    try{
-      await User.updateOne({ email: email }, {
-          $set:{
-              profilepic
-          }
-      })
-      res.send({ status: 'Ok', data: 'updated'})
-   }catch(err){
-      return res.send({ error: error})
-   }
-   })
+const Post = require('../models/Post')
+const express = require('express')
+const router = express.Router()
+const mongoose = require('mongoose')
+const User = mongoose.model('User')
+const ErrorHandler = require('../utils/ErrorHandler.js')
+
+
+
+module.exports = router
