@@ -1,106 +1,62 @@
-import { StyleSheet, Text, View, StatusBar, TextInput, ScrollView, ActivityIndicator } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { containerFull, logo1, hr80, mainpageFull, searchBar } from '../../CommonCss/pagecss'
-import BottomNavbar from '../../Components/BottomNavbar'
-import TopNavbar from '../../Components/TopNavbar'
-import UsersCard from '../../Cards/UsersCard'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React from 'react'
+import profiledefault from '../../assets/profiledefault.jpg'
 
 
-const SearchUserPage = ({ navigation }) => {
+const UsersCard = ({ user, navigation })=>{
 
-
-  const [keyword, setKeyword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState([])
-  const [error, setError] = useState(null)
-
-  const getallusers = async () => {
-      if (keyword.length > 0) {
-          setLoading(true)
-          fetch('http://10.0.2.2:3000/searchuser', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ keyword: keyword })
-          })
-              .then(res => res.json())
-              .then(data => {
-                
-                  if (data.error) {
-                      setData([])
-                      setError(data.error)
-                      setLoading(false)
-                  }
-                  else if (data.message == 'User Found') {
-                      setError(null)
-                      setData(data.user)
-                      setLoading(false)
-                  }
-              })
-              .catch(err => {
-                  setData([])
-                  setLoading(false)
-              })
-      }
-      else {
-          setData([])
-          setError(null)
-      }
-  }
-
-  useEffect(() => {
-      getallusers()
-  }, [keyword])
-
-return (
-  <View style={styles.container}>
-  <StatusBar />
-  <TopNavbar navigation = {navigation} />
-  <BottomNavbar navigation={navigation} page={"SearchUserPage"} />
-
-  <TextInput style={searchBar} placeholder="Search Stars or Sellers" onChangeText={(text)=>{
-      setKeyword(text)
-  }} />
+return(
+  //use code below for upper corner small profile image
+  <TouchableOpacity onPress={()=>{
+    navigation.navigate('Other_UserProfile', { user: user })
+  }}>
+    <View style={styles.ChatCard}>
   {
-    loading ?
-    <ActivityIndicator size="large" color='#00FF7F' />
+    user.profilepic
+    ?
+    <Image source={{ uri: user.profilepic }} style={styles.profile_image}/>
     :
-    <>
-    {
-      error ?
-    <Text style={{ color: 'black' }}>{error}</Text>
-      :
-      //use code below for upper corner small profile image
-    <ScrollView style={styles.userLists}>
-    {
-      data.map((item, index)=>{
-        return <UsersCard key={item.username} user={item}
-        navigation={navigation}
-        />
-      })
-    }
-    </ScrollView>
-    }
-    </>
+    <Image source={ profiledefault } style={styles.profile_image}/>
   }
+
+
+  <View style={styles.c1}>
+  <Text style={styles.username}>{user.username}</Text>
   </View>
+  </View>
+  </TouchableOpacity>
 )
 }
 
-export default SearchUserPage
+export default UsersCard
 
 const styles = StyleSheet.create({
-container: {
-width: '100%',
-height: '100%',
-paddingVertical: 50
-},
-userLists: {
+ChatCard: {
   width: '100%',
-  marginTop: 20
+  height: 75,
+  backgroundColor: 'white',
+  borderRadius: 10,
+  marginVertical: 10,
+  flexDirection: 'row',
+  marginTop: 10,
+  padding: 10,
+},
+profile_image: {
+  width: 50,
+  height: 50,
+  borderRadius: 50,
+  borderColor: 'red',
+  borderWidth: 1
+},
+c1: {
+  marginLeft: 10
+},
+username: {
+  color: 'black',
+  fontSize: 20
 }
 })
+
 
 
    
