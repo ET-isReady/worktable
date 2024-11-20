@@ -1,189 +1,112 @@
-const venues = [
-    {
-      id: '0',
-      name: "DDSA - St.Joseph's Boys' High School (European)",
-      address: 'Ashok Nagar',
-      newImage:
-        'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800',
-      image:
-        'https://playov2.gumlet.io/v3_homescreen/marketing_journey/Tennis%20Spotlight.png',
-      location:
-        'No. 27, Museum Rd, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka',
-      rating: 3.6,
-      timings: '5.30 AM - 9:00 PM',
-      sportsAvailable: [
-        {
-          id: '10',
-          name: 'Badminton',
-          icon: 'badminton',
-          price: 500,
-          courts: [
-            {
-              id: '10',
-              name: 'Standard synthetic court 1',
-            },
-            {
-              id: '11',
-              name: 'Standard synthetic court 2',
-            },
-            {
-              id: '12',
-              name: 'Standard synthetic court 3',
-            },
-          ],
-        },
-        {
-          id: '11',
-          name: 'Cricket',
-          icon: 'cricket',
-          price: 1100,
-          courts: [
-            {
-              id: '10',
-              name: 'Full Pitch 1',
-            },
-            {
-              id: '11',
-              name: 'Full Pitch 2',
-            },
-          ],
-        },
-        {
-          id: '12',
-          name: 'Tennis',
-          icon: 'tennis',
-          price: 900,
-          courts: [
-            {
-              id: '10',
-              name: 'Court 1',
-            },
-            {
-              id: '11',
-              name: 'Court 2',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: '1',
-      image:
-        'https://playo.gumlet.io/PANCHAJANYABADMINTONFITNESSACADEMY/panchajanyabadmintonfitnessacademy1597334767773.jpeg?mode=crop&crop=smart&h=200&width=450&q=40&format=webp',
-      name: 'Panchajanya Badminton & Fitness Academy',
-      address: 'Kittur Rani Chennamma Stadium',
-      location:
-        'Gate 01, Kittur Rani Chennamma Stadium, Sports Complex, Jayanagar, Jayanagar East, Byrasandra, Jayanagar, Bengaluru, Karnataka - 560011',
-      rating: 4.0,
-      newImage:
-        'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800',
-      timings: '5 AM - 10 PM',
-      sportsAvailable: [
-        {
-          id: '10',
-          name: 'Badminton',
-          icon: 'badminton',
-          price: 500,
-          courts: [
-            {
-              id: '10',
-              name: 'Standard synthetic court 1',
-            },
-            {
-              id: '11',
-              name: 'Standard synthetic court 2',
-            },
-            {
-              id: '12',
-              name: 'Standard synthetic court 3',
-            },
-          ],
-        },
-        {
-          id: '11',
-          name: 'Cricket',
-          icon: 'cricket',
-          price: 1100,
-          courts: [
-            {
-              id: '10',
-              name: 'Full Pitch 1',
-            },
-            {
-              id: '11',
-              name: 'Full Pitch 2',
-            },
-          ],
-        },
-        {
-          id: '12',
-          name: 'Tennis',
-          icon: 'tennis',
-          price: 900,
-          courts: [
-            {
-              id: '10',
-              name: 'Court 1',
-            },
-            {
-              id: '11',
-              name: 'Court 2',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Sportexx',
-      image:
-        'https://playo.gumlet.io/SPORTEXX20220319100016960702/sportexx1647683524186.jpg?mode=crop&crop=smart&h=200&width=450&q=40&format=webp',
-      address: 'Hebbal Kempapura',
-      location: '#43/2, 3rd Cross, Sonnappa Layout, Bhuvaneshwari Nagar',
-      rating: 4.1,
-      newImage:
-        'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800',
-      timings: '5.30 AM - 9:00 PM',
-      sportsAvailable: [
-        {
-          id: '10',
-          name: 'Badminton',
-          icon: 'badminton',
-          price: 500,
-          courts: [
-            {
-              id: '10',
-              name: 'Standard synthetic court 1',
-            },
-            {
-              id: '11',
-              name: 'Standard synthetic court 2',
-            },
-            {
-              id: '12',
-              name: 'Standard synthetic court 3',
-            },
-          ],
-        },
-        {
-          id: '11',
-          name: 'Cricket',
-          icon: 'cricket',
-          price: 1100,
-          courts: [
-            {
-              id: '10',
-              name: 'Full Pitch 1',
-            },
-            {
-              id: '11',
-              name: 'Full Pitch 2',
-            },
-          ],
-        },
-      ],
-    },
-  ];
+import {StyleSheet, Text, View, Pressable, Image} from 'react-native';
+import React from 'react';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useNavigation} from '@react-navigation/native';
+
+
+const VenueCard = ({item}) => {
+
+
+ const navigation = useNavigation();
+
+
+ return (
+   <View style={{margin: 15}}>
+     <Pressable
+     onPress={() =>
+     navigation.navigate('Venue', {
+       name: item.name,
+       image: item.newImage,
+       sportsAvailable: item.sportsAvailable,
+       rating: item.rating,
+       timings: item.timings,
+       address: item.address,
+       location: item.location,
+       bookings: item.bookings
+       })
+     }
+     style={{
+       backgroundColor: 'white',
+       borderRadius: 5,
+       borderTopLeftRadius: 10,
+       borderTopRightRadius: 10
+     }}>
+       <View>
+         <Image style={styles.image1} source={{uri: item?.image}} />
+       </View>
+       <View style={{paddingVertical: 12, paddingHorizontal: 10}}>
+         <View style={styles.container7}>
+           <Text>
+             {item?.name.length > 40
+               ? item?.name?.substring(0, 40) + '...'
+               : item?.name}
+           </Text>
+           <View style={styles.container1}>
+             <AntDesign name="star" size={20} color="white" />
+             <Text style={{color: 'white', fontWeight: 'bold'}}>
+               {item?.rating}
+             </Text>
+           </View>
+         </View>
+         <Text style={{color: 'gray'}}>
+           {item?.address.length > 40
+             ? item?.address?.substring(0, 40) + '...'
+             : item?.address}
+         </Text>
+         <View style={styles.container2}></View>
+         <View style={styles.container7}>
+           <Text>Up to 10% Off</Text>
+           <Text>INR 250 Onwards</Text>
+         </View>
+       </View>
+     </Pressable>
+   </View>
+ );
+};
+
+
+export default VenueCard;
+
+
+const styles = StyleSheet.create({
+ image1: {
+   width: '100%',
+   height: 200,
+   borderTopLeftRadius: 10,
+   borderTopRightRadius: 10,
+ },
+ container1: {
+   flexDirection: 'row',
+   backgroundColor: 'green',
+   gap: 6,
+   alignItems: 'center',
+   padding: 6,
+   borderRadius: 5,
+ },
+ container2: {
+   height: 1,
+   borderWidth: 0.6,
+   borderColor: '#e0e0e0',
+   marginVertical: 10,
+ },
+ container7: {
+   flexDirection: 'row',
+   alignItems: 'center',
+   justifyContent: 'space-between',
+ },
+ pressable1: {
+   backgroundColor: 'white',
+   borderRadius: 10,
+   borderTopLeftRadius: 10,
+   borderTopRightRadius: 10,
+ },
+ pressable2: {
+   backgroundColor: 'white',
+   borderRadius: 5,
+   borderTopLeftRadius: 10,
+   borderTopRightRadius: 10
+ }
+});
 
 
 
