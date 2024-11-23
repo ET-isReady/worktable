@@ -1,302 +1,122 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, Pressable, FlatList } from 'react-native'
-import React from 'react'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import IonIcons from 'react-native-vector-icons/Ionicons'
-import VenueCard from '../../Components/VenueCard'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-
-
-const Experimental_Page2 = ({ navigation }) => {
- const venues = [
-   {
-     id: '0',
-     name: "DDSA - St.Joseph's Boys' High School (European)",
-     address: 'Ashok Nagar',
-     newImage:
-       'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800',
-     image:
-       'https://wallpapers.com/images/featured/720p-nature-background-te0eo4yinuw49nh1.jpg',
-     location:
-       'No. 27, Museum Rd, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka',
-     rating: 3.6,
-     timings: '5.30 AM - 9:00 PM',
-     sportsAvailable: [
-       {
-         id: '10',
-         name: 'Badminton',
-         icon: 'badminton',
-         price: 500,
-         courts: [
-           {
-             id: '10',
-             name: 'Standard synthetic court 1',
-           },
-           {
-             id: '11',
-             name: 'Standard synthetic court 2',
-           },
-           {
-             id: '12',
-             name: 'Standard synthetic court 3',
-           },
-         ],
-       },
-       {
-         id: '11',
-         name: 'Cricket',
-         icon: 'cricket',
-         price: 1100,
-         courts: [
-           {
-             id: '10',
-             name: 'Full Pitch 1',
-           },
-           {
-             id: '11',
-             name: 'Full Pitch 2',
-           },
-         ],
-       },
-       {
-         id: '12',
-         name: 'Tennis',
-         icon: 'tennis',
-         price: 900,
-         courts: [
-           {
-             id: '10',
-             name: 'Court 1',
-           },
-           {
-             id: '11',
-             name: 'Court 2',
-           },
-         ],
-       },
-     ],
-   },
-   {
-     id: '1',
-     image:
-       'https://thumbs.dreamstime.com/b/gentle-nature-background-butterfly-blurred-324410107.jpg',
-     name: 'Panchajanya Badminton & Fitness Academy',
-     address: 'Kittur Rani Chennamma Stadium',
-     location:
-       'Gate 01, Kittur Rani Chennamma Stadium, Sports Complex, Jayanagar, Jayanagar East, Byrasandra, Jayanagar, Bengaluru, Karnataka - 560011',
-     rating: 4.0,
-     newImage:
-       'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800',
-     timings: '5 AM - 10 PM',
-     sportsAvailable: [
-       {
-         id: '10',
-         name: 'Badminton',
-         icon: 'badminton',
-         price: 500,
-         courts: [
-           {
-             id: '10',
-             name: 'Standard synthetic court 1',
-           },
-           {
-             id: '11',
-             name: 'Standard synthetic court 2',
-           },
-           {
-             id: '12',
-             name: 'Standard synthetic court 3',
-           },
-         ],
-       },
-       {
-         id: '11',
-         name: 'Cricket',
-         icon: 'cricket',
-         price: 1100,
-         courts: [
-           {
-             id: '10',
-             name: 'Full Pitch 1',
-           },
-           {
-             id: '11',
-             name: 'Full Pitch 2',
-           },
-         ],
-       },
-       {
-         id: '12',
-         name: 'Tennis',
-         icon: 'tennis',
-         price: 900,
-         courts: [
-           {
-             id: '10',
-             name: 'Court 1',
-           },
-           {
-             id: '11',
-             name: 'Court 2',
-           },
-         ],
-       },
-     ],
-   },
-   {
-     id: '2',
-     name: 'Sportexx',
-     image:
-       'https://www.creativefabrica.com/wp-content/uploads/2023/04/02/Nature-Background-Graphics-66003217-1.jpg',
-     address: 'Hebbal Kempapura',
-     location: '#43/2, 3rd Cross, Sonnappa Layout, Bhuvaneshwari Nagar',
-     rating: 4.1,
-     newImage:
-       'https://images.pexels.com/photos/3660204/pexels-photo-3660204.jpeg?auto=compress&cs=tinysrgb&w=800',
-     timings: '5.30 AM - 9:00 PM',
-     sportsAvailable: [
-       {
-         id: '10',
-         name: 'Badminton',
-         icon: 'badminton',
-         price: 500,
-         courts: [
-           {
-             id: '10',
-             name: 'Standard synthetic court 1',
-           },
-           {
-             id: '11',
-             name: 'Standard synthetic court 2',
-           },
-           {
-             id: '12',
-             name: 'Standard synthetic court 3',
-           },
-         ],
-       },
-       {
-         id: '11',
-         name: 'Cricket',
-         icon: 'cricket',
-         price: 1100,
-         courts: [
-           {
-             id: '10',
-             name: 'Full Pitch 1',
-           },
-           {
-             id: '11',
-             name: 'Full Pitch 2',
-           },
-         ],
-       },
-     ],
-   },
- ];
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import {useRoute} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
+//    import Amenities from '../components/Amenities';
+const Experimental_Page2 = ( { route } ) => {
+ const navigation = useNavigation()
+ const { item } = route.params;
+ // const route = useRoute();
+ // console.log(route?.params)
  return (
-   <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5'}}>
-     <View style={styles.container2}>
-       <View style={styles.container1}>
-           <Text>Experimental_Page2</Text>
-           <MaterialIcons onPress={() => navigation.navigate('Experimental_Page1')} name="keyboard-arrow-left" size={30} color="black" />
-       </View>
-       <View style={styles.container3}>
-         <IonIcons name="chatbox-outline" size={24} color="black" />
-         <IonIcons name="notifications-outline" size={24} color="black" />
-         {/* <Image style={styles.image1}
-         source={{ uri: 'https://media.istockphoto.com/id/613550954/vector/breaking-news-headline-newspaper-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=ZLyQEdx1Ynh1WRsr9Nx2ZIo_NC7TCIUS_yQ3_FwL3tE=' }}
-         /> */}
-         <Image style={styles.image1}
-         source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }}
-         />
-       </View>
+ <TouchableOpacity onPress={() => navigation.navigate('Experimental_Page1', { item })}>
+     <View style={styles.pressable3}>
+       <Text style={styles.text5}>{ item.id }</Text>
+       <Text style={styles.text5}>{ item.image }</Text>
+       <Image style={styles.image1} source={{ uri: item?.image }} />
      </View>
-     <View style={styles.container4}>
-       <TextInput placeholder='Search for Venues' />
-       <IonIcons name="search" size={24} color="black" />
+     <View style={styles.pressable4}>
+       <Text style={styles.text5}>{ item.id }</Text>
+       <Text style={styles.text5}>{ item.name }</Text>
+       <Image style={styles.image1} source={{ uri: item?.image }} />
      </View>
-     <Pressable style={styles.pressable1}>
-
-
-       <View style={styles.container5}>
-         <Text>
-           Sports & Availablility
-         </Text>
-       </View>
-
-
-       <View style={styles.container5}>
-         <Text>
-           Favorites
-         </Text>
-       </View>
-
-
-       <View style={styles.container5}>
-         <Text>
-           Offers
-         </Text>
-       </View>
-
-
-     </Pressable>
-
-
-     <FlatList data={venues} renderItem={({ item }) => <VenueCard item={ item } /> }
-     contentContainerStyle={{ paddingBottom: 20}}
-     showsVerticalScrollIndicator={false}
-      />
-      <AntDesign name="pluscircle" size={50} color="#FF80ED"
- style={styles.pluscircle} onPress={()=>navigation.navigate('Experimental_Page1')} />
-   </SafeAreaView>
- )
-}
-
-
-export default Experimental_Page2
-
-
+ </TouchableOpacity>
+ );
+};
+export default Experimental_Page2;
 const styles = StyleSheet.create({
+ image1: {
+   width: '100%',
+   height: 200,
+   resizeMode: 'cover',
+ },
  container1: {
    flexDirection: 'row',
    alignItems: 'center',
-   gap: 5
+   marginTop: 5,
+   gap: 5,
  },
  container2: {
    flexDirection: 'row',
-   alignItems: 'center',
-   justifyContent:'space-between',
-   padding: 12
+   marginVertical: 8,
+   gap: 5,
  },
  container3: {
+   padding: 10,
    flexDirection: 'row',
    alignItems: 'center',
-   gap: 10
+   justifyContent: 'space-around',
  },
  container4: {
-   marginHorizontal: 12,
-   backgroundColor: '#e8e8e8',
-   padding: 10,
-   flexDirection: 'row',
-   alignItems: 'center',
-   justifyContent: 'space-between',
-   borderRadius: 25
- },
- container5: {
-   padding: 10,
-   borderRadius: 10,
-   borderColor: '#e0e0e0',
-   borderWidth: 1
+   borderColor: '#686868',
+   margin: 10,
+   padding: 20,
+   width: 130,
+   height: 90,
+   borderWidth: 1,
+   borderRadius: 5,
  },
  image1: {
-   width: 30,
-   height: 30,
-   borderRadius: 15
+     width: '100%',
+     height: 200,
+     borderTopLeftRadius: 10,
+     borderTopRightRadius: 10
  },
  pressable1: {
+   borderColor: '#686868',
+   width: 160,
+   borderWidth: 1,
+   borderRadius: 5,
+   justifyContent: 'center',
+   alignItems: 'center',
+   padding: 10,
+   marginTop: 6,
+ },
+ pressable2: {
+   borderColor: '#787878',
+   marginTop: 10,
+   borderWidth: 1,
+   padding: 10,
+   justifyContent: 'center',
    flexDirection: 'row',
    alignItems: 'center',
    gap: 10,
-   padding: 13
+   borderRadius: 5,
+ },
+ pressable3: {
+   backgroundColor: 'purple',
+   padding: 8,
+   marginTop: 30,
+   borderRadius: 3,
+   marginHorizontal: 15
+ },
+ text1: {
+   fontSize: 14,
+   width: '80%',
+   fontWeight: '500',
+ },
+ text2: {
+   fontSize: 15,
+   fontWeight: '500',
+   marginHorizontal: 10,
+ },
+ text3: {
+   fontSize: 13,
+   fontWeight: 'bold',
+   textAlign: 'center',
+   marginTop: 10,
+ },
+ text4: {
+   fontSize: 15,
+   fontWeight: 'bold',
+ },
+ text5: {
+   textAlign: 'center',
+   fontWeight: 'bold',
+   color: 'white'
+ },
+ text6: {
+   fontSize: 20,
+   fontWeight: 'bold',
  }
-})
+});
