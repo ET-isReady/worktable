@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { Animated, StyleSheet, View, TouchableOpacity, Text, SafeAreaView } from 'react-native';
-import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 import { useSharedValue, useAnimatedStyle, interpolate, withTiming } from 'react-native-reanimated';
 
 
+// Remember! GestureHandlerRootView is in App.js b/c the whole app  must be wrapped in it on Android devices!!
 
 
 const Experimental_Page3 = ({ route }) => {
@@ -32,7 +33,11 @@ const Experimental_Page3 = ({ route }) => {
 
 
 return (
-<GestureHandlerRootView  style={{flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+<SafeAreaView style={{alignItems: 'center', justifyContent: 'center'}}>
+     <View style={styles.pressable3}>
+       <Text style={styles.text5}>{ item.id }</Text>
+       <Text style={styles.text5}>{ item.image }</Text>     
+     </View>
   <PanGestureHandler onGestureEvent={onGestureEvent}>
     <Animated.View style={[styles.pressable4,
      {
@@ -50,11 +55,9 @@ return (
        <Text style={styles.text5}>{ item.name }</Text>
     </Animated.View>
   </PanGestureHandler>
-</GestureHandlerRootView>  
+</SafeAreaView>
 );
 };
-
-
 
 
 const styles = StyleSheet.create({
@@ -79,8 +82,6 @@ const styles = StyleSheet.create({
    fontWeight: 'bold'
 }
 });
-
-
 
 
 export default Experimental_Page3;
