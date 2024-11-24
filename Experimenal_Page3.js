@@ -1,50 +1,86 @@
 import React, { useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { Animated, StyleSheet, View, TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
+import { useSharedValue, useAnimatedStyle, interpolate, withTiming } from 'react-native-reanimated';
 
 
-const Experimental_Page3 = () => {
- const isFlipped = useSharedValue(false);
- const pan = useRef(new Animated.Value(0)).current;
+
+
+const Experimental_Page3 = ({ route }) => {
+ const { item } = route.params;
+ const translationX = new Animated.Value(0)
+ const translationY = new Animated.Value(0)
 
 
  const animatedStyle = useAnimatedStyle(() => {
-   const rotateY = interpolate(pan.value, [-100, 100], [-180, 180]);
+  
    return {
-     transform: [{ rotateY }],
+     transform: [{ }],
    };
  });
 
 
  const onGestureEvent = Animated.event(
-   [
-     {
-       nativeEvent: {
-         translationX: pan,
-       },
-     },
-   ],
+   [{
+     nativeEvent: {
+       translationX: translationX,
+       translationY: translationY,
+     }
+   }],
    { useNativeDriver: true }
  );
 
 
- return (
-   <PanGestureHandler onGestureEvent={onGestureEvent}>
-     <Animated.View style={[styles.card, animatedStyle]}>
-       {/* Front content */}
-       {/* Back content */}
-     </Animated.View>
-   </PanGestureHandler>
- );
+return (
+<GestureHandlerRootView  style={{flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  <PanGestureHandler onGestureEvent={onGestureEvent}>
+    <Animated.View style={[styles.pressable4,
+     {
+       transform: [
+         {
+           translateX: translationX,
+         },
+         {
+           translateY: translationY,
+         },
+       ],
+      }
+    ]}>
+       <Text style={styles.text5}>{ item.id }</Text>
+       <Text style={styles.text5}>{ item.name }</Text>
+    </Animated.View>
+  </PanGestureHandler>
+</GestureHandlerRootView>  
+);
 };
 
 
+
+
 const styles = StyleSheet.create({
- card: {
-   // Card styling
+ pressable3: {
+   backgroundColor: 'green',
+   padding: 8,
+   marginTop: 30,
+   borderRadius: 3,
+   width: 150,
+   height: 150
  },
+ pressable4: {
+   backgroundColor: 'red',
+   padding: 8,
+   marginTop: 30,
+   borderRadius: 3,
+   width: 150,
+   height: 150
+ },
+ text5: {
+   color: 'white',
+   fontWeight: 'bold'
+}
 });
+
+
 
 
 export default Experimental_Page3;
