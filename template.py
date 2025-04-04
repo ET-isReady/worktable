@@ -1,8 +1,7 @@
 # remember to use python3 or pip3 since you have a mac
 
 
-# username: etbermuda1@gmail.com
-# password: plumkitteN635!
+
 
 
 import os
@@ -177,8 +176,7 @@ time.sleep(5)
 driver.close()
 
 
-# username: etbermuda1@gmail.com
-# password: plumkitteN635!
+
 
 
 # posting title
